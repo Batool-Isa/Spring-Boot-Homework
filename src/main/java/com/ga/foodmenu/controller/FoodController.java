@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-public class FoodConrtoller {
+public class FoodController {
     private final FoodService foodService;
 
-    public FoodConrtoller(FoodService foodService) {
+    public FoodController(FoodService foodService) {
         this.foodService = foodService;
     }
 
@@ -83,7 +83,7 @@ public class FoodConrtoller {
                             @RequestParam(value = "price", defaultValue = "0") double price) {
         Food food = foodService.getAllFoods()
                 .stream().
-                filter(f -> f.getName().toLowerCase().contains(name.toLowerCase())).findFirst().orElse(null);
+                filter(f -> f.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
         if (food != null) {
             food.setPrice(price);
         }
@@ -95,7 +95,7 @@ public class FoodConrtoller {
         boolean deleted = false;
         Food food = foodService.getAllFoods()
                 .stream().
-                filter(f -> f.getName().toLowerCase().contains(name.toLowerCase())).findFirst().orElse(null);
+                filter(f -> f.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
         if (food != null) {
             deleted = foodService.getAllFoods().remove(food);
             if (deleted == true) {
@@ -103,8 +103,10 @@ public class FoodConrtoller {
             } else {
                 return "Not Deleted";
             }
+        }else{
+            return "Food not found in menu";
         }
-        return null;
+
     }
 
     @GetMapping("/foods/statistics")
@@ -127,6 +129,9 @@ public class FoodConrtoller {
     // route to select random food for user
     @GetMapping("/foods/surprise")
     public Food foodRoulette() {
+        if (foodService.getAllFoods().isEmpty()) {
+            return null;
+        }
         Random random = new Random();
         int randomIndex = random.nextInt(foodService.getAllFoods().size());
         return foodService.getAllFoods().get(randomIndex);

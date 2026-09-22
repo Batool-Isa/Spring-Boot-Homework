@@ -11,7 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class ProfileController {
-    @GetMapping("/")
+    @GetMapping("/profile")
     public Map<String, String> getProfile() {
         Map<String, String> info = new HashMap<>();
         info.putAll(Map.of(
