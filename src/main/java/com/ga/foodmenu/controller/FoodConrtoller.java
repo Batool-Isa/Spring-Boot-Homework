@@ -115,7 +115,7 @@ public class FoodConrtoller {
         Food cheapestItem = foodService.getAllFoods().stream().min(Comparator.comparingDouble(Food::getPrice)).orElse(null);
 
         info.put(
-                "Total Food Items", String.valueOf(total)));
+                "Total Food Items", String.valueOf(total));
         if (expensiveItem !=null && cheapestItem != null){
             info.putAll(Map.of("Most Expensive Food", expensiveItem.getName(),
                     "Cheapest Food", cheapestItem.getName()));
